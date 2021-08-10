@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g9lr^rwa3!ij3(mn-ii%#0@iujyj0nsl307x-^@x%ocakz9+lt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
   "http://localhost:8080",
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'myblog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(FRONTEND_DIR, 'dist')],
+        'DIRS': [os.path.join(FRONTEND_DIR, 'blog')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,10 +124,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(FRONTEND_DIR, 'dist/static'),  # new
+    os.path.join(FRONTEND_DIR, 'blog/static'),  # new
 )
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(FRONTEND_DIR, 'dist') # new
+MEDIA_ROOT = os.path.join(FRONTEND_DIR, 'blog') # new
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
