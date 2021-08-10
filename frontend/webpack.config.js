@@ -5,11 +5,11 @@ const path = require('path');
 module.exports = {
   entry:'./src/index.js',
   output:{
-    path: path.join(__dirname, '/dist/static'),
+    path: path.join(__dirname, '/blog/static'),
     filename: 'main.js'
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './blog',
     open: true
   },
   module: {
