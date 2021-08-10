@@ -1,35 +1,26 @@
 #!/bin/bash
-# Name of the application
-NAME="myblog"
-# Django project directory
-DJANGODIR=/home/sk/myblog/myblog
-# we will communicte using this unix socket
-SOCKFILE=/home/sk/myblog/run/gunicorn.sock
-# the user to run as
-USER=sk
-# the group to run as
 
-# how many worker processes should Gunicorn spawn
-NUM_WORKERS=3
-# which settings file should Django use
+NAME="myblog"
+DIR=/home/sk/myblog/myblog
+USER=sk
+GROUP=sk
+WORKERS=3
+BIND=unix:/home/sk/myblog/run/gunicorn.sock
 DJANGO_SETTINGS_MODULE=myblog.settings
-# WSGI module name
 DJANGO_WSGI_MODULE=myblog.wsgi
-echo "Starting $NAME as `whoami`"
-# Activate the virtual environment
-cd $DJANGODIR
+LOG_LEVEL=error
+
+cd $DIR
 source ../pass/bin/activate
 
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
-export PYTHONPATH=$DJANGODIR:$PYTHONPATH
-# Create the run directory if it doesn't exist
-RUNDIR=$(dirname $SOCKFILE)
-test -d $RUNDIR || mkdir -p $RUNDIR
-# Start your Django Unicorn
-# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
-exec ../gunicorn ${DJANGO_WSGI_MODULE}:application \
---name $NAME \
---workers $NUM_WORKERS \
---bind=unix:$SOCKFILE \
---log-level=debug \
---log-file=-
+export PYTHONPATH=$DIR:$PYTHONPATH
+
+exec ../pass/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  --name $NAME \
+  --workers $WORKERS \
+  --user=$USER \
+  --group=$GROUP \
+  --bind=$BIND \
+  --log-level=$LOG_LEVEL \
+  --log-file=-
