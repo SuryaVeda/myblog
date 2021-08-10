@@ -59,6 +59,7 @@ class FormCreator extends React.Component {
         console.log('dksjflsjaf\\\\\\\\');
         console.log(this.props.props);
         let form_submit = (event) => {
+            console.log(event);
             event.preventDefault();
             if (this.props.props.buttonCustomFunction) {
                 this.props.props.buttonCustomFunction();  

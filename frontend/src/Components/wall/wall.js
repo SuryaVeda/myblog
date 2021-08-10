@@ -68,7 +68,6 @@ export default class Wall extends React.Component {
             
             form_id : id,
 
-            buttonCustomFunction : (event) => {event.target.style.display = 'none'; event.target.nextSibling.style.display = 'flex'},
             customSubmitFunction: (data,comp) => {console.log('data')}
         })  
         };
@@ -125,7 +124,6 @@ export default class Wall extends React.Component {
             
             form_id : 'post_form',
 
-            buttonCustomFunction : (event) => {event.target.style.display = 'none'; event.target.nextSibling.style.display = 'flex'},
             customSubmitFunction: (data,comp) => {console.log('data')}
         };
         let data = this.props.data;

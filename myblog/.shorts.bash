@@ -18,7 +18,7 @@ drop database $1;
 }
 function push() {
 cd ~/desktop/myblog
-git add *
+git add frontend myblog
 git commit -m 'x'
 git push origin main
 

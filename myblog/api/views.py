@@ -14,9 +14,9 @@ class CreateFact(View):
         para = list(Fact.objects.order_by('-pk'))[0].para
         return JsonResponse({'fact_data': {'para': para}})
     def post(self, *args, **kwargs):
-        fact_field = json.loads(self.request.body.decode('utf-8'))['fact_field'][0]
+        fact_field = self.request.POST.dict()
         print(fact_field)
-        x = Fact.objects.create(para = fact_field)
+        x = Fact.objects.create(para = fact_field['fact_field'])
         print(type(x.para))
         return JsonResponse({'fact_data': {'para': x.para}}, safe=False)
 

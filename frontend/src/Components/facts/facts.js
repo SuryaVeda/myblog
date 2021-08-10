@@ -57,7 +57,6 @@ export default class Fact extends React.Component {
             },
             form_id : 'fact_form',
 
-            buttonCustomFunction : (event) => {event.target.style.display = 'none'; event.target.nextSibling.style.display = 'flex'},
             customSubmitFunction: (data,comp) => {(comp.details = data)}
         };
         
