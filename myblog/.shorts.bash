@@ -17,8 +17,8 @@ psql postgres -U sk
 drop database $1;
 }
 function push() {
-cd ~/desktop/aaa
-git add aaa
+cd ~/desktop/myblog
+git add *
 git commit -m 'x'
 git push origin main
 
