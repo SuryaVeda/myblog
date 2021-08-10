@@ -10,10 +10,13 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>My Blog</title>
-    <script defer="defer" src="/static/main.js"></script>
+    <script defer="defer" src="main.js"></script>
 </head>
 
-<body><noscript>You need to enable JavaScript to run this app.</noscript>
+<body>
+    <div>
+        <h1>hi</h1>{% csrf_token %}
+    </div><noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 </body>
 
