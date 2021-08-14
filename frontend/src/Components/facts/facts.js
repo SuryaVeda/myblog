@@ -65,7 +65,13 @@ export default class Fact extends React.Component {
         
         return(
             <div className = 'flex-column facts notosans'>
-                   <h2 onClick = {(event) => {this.props.data.methods.showform('fact_para', fact_form.form_id)}}>Something new!!</h2>
+                   <h2 onClick = {(event) => {
+                       if (this.props.data.methods.user_is_staff()) {
+                        this.props.data.methods.showform('fact_para', fact_form.form_id)                          
+                       } else {
+                           
+                       }
+                   }}>Something new!!</h2>
                    <FormCreator props = {fact_form} />
                    <p id= 'fact_para' onClick = {(event) => {this.props.data.methods.showform('fact_para', fact_form.form_id)}}> {this.state.fact_data.para} </p>
            </div>

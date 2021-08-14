@@ -16,8 +16,7 @@ class FormCreator extends React.Component {
         this.setState(this.props);
     }
     componentDidUpdate () {
-       console.log(`form creater ${this.state}`);
-       console.log(this.state)
+      
     }
     render() {
         let {fields} = this.props.props;
@@ -26,13 +25,24 @@ class FormCreator extends React.Component {
         let {buttonStyle} = this.props.props;
         let img_field = () => {
             if (this.props.props.image_field) {
-                return(
-                   <div className = 'flex-column'>
-                        <label htmlFor = {this.props.props.image_field.id} ><img className = 'icon' src = {img_upload} />  </label>
-
-                        <input id ={this.props.props.image_field.id} style={this.props.props.image_field.style} type ={ this.props.props.image_field.type} name = {this.props.props.image_field.name}  />
-                   </div>
-                )
+                if (this.props.props.image_field.multiple == true) {
+                    return(
+                        <div className = 'flex-column'>
+                             <label htmlFor = {this.props.props.image_field.id} ><img className = 'icon' src = {img_upload} />  </label>
+     
+                             <input id ={this.props.props.image_field.id} style={this.props.props.image_field.style} type ={ this.props.props.image_field.type} name = {this.props.props.image_field.name} multiple />
+                        </div>
+                     )
+                } else {
+                    return(
+                        <div className = 'flex-column'>
+                             <label htmlFor = {this.props.props.image_field.id} ><img className = 'icon' src = {img_upload} />  </label>
+     
+                             <input id ={this.props.props.image_field.id} style={this.props.props.image_field.style} type ={ this.props.props.image_field.type} name = {this.props.props.image_field.name}  />
+                        </div>
+                     )
+                }
+               
                 
             }     
             
@@ -50,20 +60,16 @@ class FormCreator extends React.Component {
            </div>)
             }
             else {
-                console.log('no button')
                     
                 
 
             }
         };
-        console.log('dksjflsjaf\\\\\\\\');
-        console.log(this.props.props);
+        
         let form_submit = (event) => {
-            console.log(event);
             event.preventDefault();
-            if (this.props.props.buttonCustomFunction) {
-                this.props.props.buttonCustomFunction();  
-            }
+            
+            
            
             this.props.props.data.methods.addData(
                 {
@@ -71,8 +77,17 @@ class FormCreator extends React.Component {
                     'cstate': this.props.props.component, 
                     'post_url':this.props.props.form_url, 
                     'pk' :this.props.props.pk, 
-                    'customSubmitFunction': this.props.props.customSubmitFunction
+                    'customSubmitFunction': this.props.props.customSubmitFunction,
+                    'data':this.props.props
                 })
+                if (this.props.props.buttonCustomFunction) {
+                    console.log('yes button custom functino present');
+                    this.props.props.buttonCustomFunction();  
+                } else {
+                    event.target.reset();
+                }
+            
+            
         };
         return (
             <div  id={this.props.props.form_id} className = 'flex-column' style={this.props.props.motherStyle.style}>
@@ -82,9 +97,8 @@ class FormCreator extends React.Component {
                 {
                     let multiple;
                     let classe = `display-none ${i.className}`;
-                    if (i.type == 'text') {
+                    if (i.type !='file' || i.type != 'image') {
                         let create_field = () => {
-                            console.log('lets se3e');
                             
                             if (i.multiple == true) {
                                 return(

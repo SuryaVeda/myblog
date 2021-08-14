@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+{% load static %}
+{% load customtags %}
+<html>
+
+<head>
+  <title>All about anesthesia</title>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'home/css/base.css' %}">
+  <link rel="stylesheet" href="{% static "home/css/common.css" %}">
+
+
+
+</head>
+
+<body>
+  <div class="top">
+    <h1>
+      My Passions
+    </h1>
+  </div>
+
+  <style media="screen">
+
+
+    .navbar {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-evenly;
+      align-items: center;
+      background-color: #432109;
+      color: white;
+      height: 50px;
+      position: relative;
+      flex-grow: 1;
+    }
+    .navyclass{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+  }
+  .navyclass-new {
+    width: 100%;
+    position: fixed;
+    top: 50px;
+    z-index: 1;
+  }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .drop {
+      position: absolute;
+      top: 50px;
+      z-index: 1;
+      display: none;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background-color: #432109;
+    }
+
+    .item {
+      border-radius: 8px;
+    }
+
+    .item a {
+      min-height: 50px;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+
+      padding: 0 15px 0 15px;
+    }
+
+    .item:hover {
+      background-color: black;
+    }
+    #small-screen-nav {
+      display: none;
+    }
+    .items {
+      display: none;
+      flex-flow: column wrap;
+      background-color: #432109;
+      color: white;
+    }
+    .items a {
+      color: white;
+    }
+    .items .drop {
+      display: flex;
+      flex-flow: column wrap;
+      display: none;
+      justify-content: flex-start;
+      position: static;
+      align-items: flex-start;
+      margin-left: 10px;
+    }
+
+    @media screen and (max-width:800px) {
+      #big-screen-nav {
+        display: none;
+      }
+      #small-screen-nav {
+        display: flex;
+        height:  auto;
+
+      }
+
+      .navbar {
+        justify-content: flex-start;
+      }
+      .items {
+        height: 200px;
+        overflow: scroll;
+        flex-wrap: nowrap;
+      }
+    }
+  </style>
+  <script src="{% static 'home/js/base.js' %}">
+  </script>
+  <div class="navbar" id = "big-screen-nav">
+    <div class="item">
+      <a href="#"> <img class="icon" src="{% static 'home/images/home.png' %}" alt=""> </a>
+    </div>
+
+    <div class="item ">
+      <a onclick="opendrop(this)">Clubs</a>
+      <div class="drop">
+        {% clubs_nav as clubs %}
+        {% for club in clubs %}
+        <a class="nav-link nav-item" href="{% url 'clubs:clubs' club.pk club.beautify %}">{{ club.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="item">
+      <a href="">Question Bank</a>
+    </div>
+
+    <div class="item">
+      <a href="#">Travel</a>
+
+    </div>
+
+    <div class="item">
+      <a onclick="opendrop(this)">drop 2</a>
+      <div class="drop">
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+      </div>
+    </div>
+
+    <div class="item">
+      {% if request.user.is_authenticated %}
+      <a onclick="opendrop(this)">P</a>
+      <div class="drop">
+        <a class="" href="{% url 'profiles:myprofile' request.user.username %}"> myProfile </a>
+        <a class="" href="{% url 'accounts:logout' %}">Logout</a>
+      </div>
+      {% else %}
+      <a class="" href="{% url 'accounts:login' %}">login</a>
+      {% endif %}
+    </div>
+
+
+  </div>
+
+  <div class="navbar" id = "small-screen-nav">
+
+    <div class="flex-column flex-grow ">
+      <div class="flex-row space-between">
+        <div onclick="openstacks()" class="item">
+          <a > <img class="icon" src="{% static 'home/images/stacks.png' %}" alt=""> </a>
+        </div>
+
+
+        <div class="item">
+          <a href="#"> <img class="icon" src="{% static 'home/images/home.png' %}" alt=""> </a>
+        </div>
+        <div class="item">
+          {% if request.user.is_authenticated %}
+          <a onclick="opendrop(this)">P</a>
+          <div class="drop">
+            <a class="" href="{% url 'profiles:myprofile' request.user.username %}"> myProfile </a>
+            <a class="" href="{% url 'accounts:logout' %}"> <img class="icon" src="{% static 'home/images/logout.png' %}" /> </a>
+          </div>
+          {% else %}
+          <a class="" href="{% url 'accounts:login' %}"> login</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="items">
+
+    <div class="item ">
+      <a onclick="opendrop(this)">dropdown</a>
+      <div class="drop">
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <a href="">Question Bank</a>
+    </div>
+
+    <div class="item">
+      <a href="#">Travel</a>
+
+    </div>
+
+    <div class="item">
+      <a onclick="opendrop(this)">drop 2</a>
+      <div class="drop">
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+        <a class="nav-link nav-item" href="">Example 1</a>
+      </div>
+    </div>
+
+  </div>
+
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.extra_tags == request.user.email %}
+  <p class="bold-red">{{message}}</p>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+
+  {% block main%}
+  {% endblock %}
+
+  {% block js%}
+  {% endblock %}
+
+
+</body>
+<footer>
+  <div class="neeche">
+    <p>social media icons</p>
+  </div>
+
+
+
+</footer>
+
+
+</html>

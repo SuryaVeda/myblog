@@ -32,6 +32,17 @@
   font-family: 'Noto Sans';
 }
 
+.linkStyle {
+  color: #000066;
+  font-weight: bold;
+}
+.bold-red{
+  color: red;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+
 .small-font {
   font-size: 10px;
 }
@@ -44,9 +55,6 @@
 
 .linebreaks {
   white-space: pre-line;
-}
-.display-none {
-  display: none;
 }
 
 .flex-column{
@@ -89,7 +97,13 @@
   justify-content: center;
 }
 
+.display-none {
+  display: none;
+}
 
+.small-box {
+  min-height: 100px;
+}
 
 .heading-font{
   font-size: 25px;
@@ -176,6 +190,10 @@
 
 a {
   color : inherit;
+}
+
+.nav-item{
+  margin: 0 20px;
 }
 .nav-item a{
   display: flex;
@@ -268,12 +286,16 @@ a {
 .comment-main-box {
   display: none;
 }
+.reply-box {
+  background-color: #FFFAF0;
+}
 
 .trip-index {
   width: 30%;
   background-color: bisque;
   height: auto;
   padding:20px;
+
 
 }
 .trip-main {
@@ -285,6 +307,30 @@ a {
 .trip-main p {
   line-height: 2em;
   letter-spacing: 0.8px;
+}
+#mcqbox{
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+.carouselBlockStyle{
+  display: flex;
+  flex-flow: column wrap;
+  border-bottom: 5px outset #F08080;
+  border-right: 5px outset #F08080;
+  border-top: 1px groove #F08080;
+  justify-content: center;
+  margin: 10px 0;
+  min-height: 350px;
+  width: 600px;
+}
+.carousel-image {
+  max-height: 300px;
+  max-width: 90%;
+  height: auto;
+  width: auto;
+  align-self: center;
 }
 
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>My Passions/Sign up</title>
+    <meta name="google-signin-client_id" content="1013516845533-j5e2jgv5d7fcqfhecd0ailf6nto35k1v.apps.googleusercontent.com">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'home/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/common.css' %}">
+
+    <style media="screen">
+      .fullcover{
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow-y: scroll;
+        background-image: url('{% static "home/images/stars.jpg" %}')
+      }
+      .login{
+        background-color: white;
+        width: 30%;
+        border-radius: 10px;
+        height: auto;
+        flex-wrap: nowrap;
+        overflow-y:scroll;
+      }
+      .login input {
+        height: 40px;
+        width: 250px;
+      }
+      @media screen and (max-width: 800px) {
+        .login{
+          width: 300px;
+          height: auto;
+        }
+      }
+      @media screen and (max-width: 300px) {
+        .login{
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fullcover flex-column jcenter acenter">
+        <div class="login flex-column center acenter">
+        <h1 class="center" style="font-size: 25px;">My Passions</h1>
+        <h2 class="center" style="font-size: 25px; color: #000066">Sign up</h2>
+
+        <form class="flex-column" method="get" action="{% url 'accounts:join' %}" enctype="application/x-www-form-urlencoded">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class="btn center" type="submit" name="signup" value="profileformdetails">Submit</button>
+        </form>
+        <p>Already a member. <a href="{% url 'accounts:login' %}">Log In</a> </p>
+
+    </div>
+
+    </div>
+
+
+  </body>
+</html>

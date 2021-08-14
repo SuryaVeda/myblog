@@ -1,26 +1,39 @@
 import React from 'react';
 import '../../index.css';
+import '../../../node_modules/@splidejs/splide/dist/css/splide.min.css'
 import FormCreator from '../forms/formcreator';
 import comment_img from '../../../public/static/images/comment.png';
-
+import create_comment_section from '../comments/comment';
+import Carousel from '../carousel/carousel';
 export default class TripContent extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {'travel_data': []};
-        this.loc = {url: '/api/travelPostForm'};
+        this.state = {'travel_data': [], 'user':{}};
+        this.loc = {url: '/api/travelPostForm', 'comment_url': '/api/travelCommentForm', 'reply_url': '/api/blogReplyForm'};
     }
     componentDidMount () {
+
         this.props.data.methods.setcomponent('travel_content', this );
         this.props.data.methods.getData(this.loc.url, 'travel_content');
+        this.props.data.methods.checkuser('travel_content');
+        
+       
 
         
     }
     componentDidUpdate () {
         this.props.data.methods.setcomponent('travel_content', this );
+       
+      // Carousel('mcqbox', 'mcqblock');
         
     }
     render() {
+       
+        
+        
         let ndata = this.props.data;
+        let myloc = this.loc;
+        let mystate = this.state;
         let travel_post_form = (post_data) => {
             return(
                 {
@@ -40,7 +53,7 @@ export default class TripContent extends React.Component {
                     },{
                         name : 'content_field',
                         type : 'text',
-                        placeholder : 'Enter some interesting facts!',
+                        placeholder : 'Enter details of ur story!',
                         className : 'form-field para-font',
                         style : {height:'300px', width:'100%',  margin:'10px 0'},
                         value: post_data.content_field,
@@ -62,6 +75,7 @@ export default class TripContent extends React.Component {
                             'className': 'icon',
                             type: 'file',
                             style :{display:'none'},
+                            multiple:true,
                             id : post_data.img_field_name,
                             
                         },
@@ -74,59 +88,82 @@ export default class TripContent extends React.Component {
                     },
                     
                     form_id : post_data.form_id,
+                    post_id : post_data.post_id,
         
                     buttonCustomFunction : post_data.buttonCustomFunction,
                     customSubmitFunction: (data,comp) => {console.log('data')}
                 }
             )
         }
+        let get_travel_post_form = () => {
+
+            if (mystate.user.is_authenticated == true) {
+                return(
+                <div className = 'flex-column'>
+                <p className='linkStyle pointer' onClick = {(e) => {document.getElementById('travel_post_form').style.display='flex'}}>Create travel</p>
+                <FormCreator props = {travel_post_form({heading_field : "", content_field: '', pk : null, form_id:'travel_post_form', submit_image_id: 'send_img_btn_travelpost',img_field_name:'travel_post_image_default', buttonCustomFunction: () => {document.getElementById('travel_post_form').style.display = 'none'} })} />
+               </div>
+                )             
+            } else {
+                
+            }
+        }
         return(
            <div className = 'flex-column trip-main' id = 'tripcontents'>
-                <div className = 'flex-column'>
-                <FormCreator props = {travel_post_form({heading_field : "", content_field: '', pk : null, form_id:'travel_post_form', submit_image_id: 'send_img_btn_travelpost',})} />
-            </div>
+                {get_travel_post_form()}
+
             {this.state.travel_data.map(function (i , index) {
                 let main_post_id = `travel_main_post_${i.pk}`;
                 let post_id = `travel_post_${index}`;
                 let new_form_id = `travel_post_form_${index}`;
                 let submit_image_id = `send_img_btn_travelpost-${index}`;
-                console.log(i.pk);
-                console.log(i);
-                let some_array = {
-                     heading_field : i.heading,
-                     content_field: i.content, 
-                     pk : i.pk, form_id : new_form_id, 
-                     submit_image_id:submit_image_id,
-                     img_field_name: `${post_id}-img`,
-                     buttonCustomFunction: () => {document.getElementById(post_id).style.display = 'flex', document.getElementById(new_form_id).style.display = 'none'}
+                let carousel_box_id = `travel-carousel-box-${index}`;
+                let carousel_block_class = `travel-carousel-block-${index} carouselBlockStyle`;
+                let comment_id = `travel-comment-form-${i.pk}` ;
+                let comment_details = `travel-comment-details-${i.pk}` ; 
+                
+                let get_edit_travel_form = () => {
+                    
+                    if (mystate.user.is_authenticated == true) {
+                        let some_array = {
+                            heading_field : i.heading,
+                            content_field: i.content, 
+                            pk : i.pk, form_id : new_form_id, 
+                            submit_image_id:submit_image_id,
+                            img_field_name: `${post_id}-img`,
+                            buttonCustomFunction: () => {return(ndata.methods.showform(new_form_id, post_id)) },
+                           };
+                        return(
+                            <FormCreator props={travel_post_form(some_array)} />
+                        )
                     }
+                }
+                
                 
                 return (
                   <div className = 'flex-column' id = {main_post_id} >
-                    <FormCreator props={travel_post_form(some_array)} />
+                    {get_edit_travel_form()}
 
                     <div id={post_id} className="notosans flex-column">
-                      <h2 onClick={() => {document.getElementById(post_id).style.display = 'none', document.getElementById(new_form_id).style.display = 'flex'}} className="margin-bottom-zero">{i.heading}</h2>
+                      <h2  onClick={(event) => {if (ndata.methods.user_is_staff())  {ndata.methods.showform(post_id, new_form_id)}}} className="margin-bottom-zero">{i.heading}</h2>
                       <p className="small-font">A.Suryaveda | 10 min ago</p>
-                      <p className="linebreaks">{i.content}</p>
 
-                      <div className="flex-column comment-section">
-                        <div className="flex-column comment-bar">
-                          <div id="ex"></div>
-                          <img
-                            onClick={(e) => {
-                              e.target.parentElement.nextElementSibling.style.display =
-                                "flex";
-                            }}
-                            src={comment_img}
-                            className="icon"
-                          />
-                        </div>
-                      </div>
+                      {Carousel.get_travel_image(i, carousel_box_id, carousel_block_class)}
+
+                      <p className="linebreaks">{i.content}</p>
+                      <div className = 'flex-column comment-section'>
+                    <div className='flex-column comment-bar'>
+                        <img onClick = {(e) => {document.getElementById(comment_details).style.display = 'flex'}}  src = {comment_img} className = 'icon' />
+                    </div>
+                    {create_comment_section(comment_details, i, comment_id,mystate.user, {comp:'travel_content', loc:myloc, data:ndata,})}
+                    
+                    
+                    </div>
                     </div>
                   </div>
                 );
             })}
+
            </div>
         )
     }

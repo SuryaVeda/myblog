@@ -36,6 +36,7 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     'api',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,7 +128,7 @@ STATICFILES_DIRS = (
     os.path.join(FRONTEND_DIR, 'blog/static'),  # new
 )
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(FRONTEND_DIR, 'blog') # new
+MEDIA_ROOT = os.path.join(FRONTEND_DIR, 'blog/media') # new
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

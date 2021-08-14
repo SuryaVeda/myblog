@@ -12,7 +12,7 @@ class BasePage extends React.Component {
         return (
              <div className="App">
               <Heading headingData = {vars.headingData} style={vars.headingStyle} />
-              <Nav navlinks = {vars.navlinks} navbarStyle = {vars.navbarStyle} navitemStyle = {vars.navitemStyle} />
+              <Nav navlinks = {vars.navlinks} navbarStyle = {vars.navbarStyle}  />
              
               
              </div>

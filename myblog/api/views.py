@@ -5,9 +5,34 @@ from django.shortcuts import redirect, render
 from .models import *
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from accounts.models import User
+from .decorators import *
+from django.utils.decorators import method_decorator
+
 # Create your views here.
 
+class CheckUser(View):
+    def get(self, request, *args, **kwargs ):
+    
+        try:
+            if request.session['user_id']:
+                user = {}
+                u = User.objects.get(id = request.session['user_id'])
+                user['username'] = u.username
+                user['email'] = u.email
+                user['staff'] = u.staff
+                user['admin'] = u.admin
+                user['is_authenticated'] = True                    
+                return JsonResponse({'user': user})
+            
+            else:
+                
+                return JsonResponse({'user': ''})
+        except:
+            return JsonResponse({'user': ''})
 
+
+@method_decorator(staff_required, name='post')
 class CreateFact(View):
     def get(self, request, *args, **kwargs ):
         print('get request')
@@ -21,55 +46,142 @@ class CreateFact(View):
         return JsonResponse({'fact_data': {'para': x.para}}, safe=False)
 
 
+@method_decorator(staff_required, name='post')
 class CreateBlogPost(View):
     def get(self, request, *args, **kwargs ):
+        
         print('get request')
-        post = list(BlogPost.objects.order_by('-pk').values('heading', 'content', 'pk', 'image'))
+        post = list(BlogPost.objects.order_by('-pk'))
+        def get_post_dict(i):
+            comments = []
+            for j in i.get_comments():
+                replies = []
+                for k in j.get_replies():
+                    try:
+                        replies.append({'text': k.text, 'image':k.image.url, 'pk':k.pk, 'user':k.get_user()})
+                    except:
+                        replies.append({'text': k.text, 'image':'', 'pk':k.pk,'user':k.get_user()})
+                try: 
+                    comments.append({'text': j.text, 'image':j.image.url, 'pk':j.pk, 'replies': replies, 'user':j.get_user()})
+                except:
+                    comments.append({'text': j.text, 'image':'', 'pk':j.pk, 'replies': replies, 'user':j.get_user()})
+
+            try:
+                return {'heading':i.heading, 'content':i.content, 'image':i.image.url, 'comments':comments, 'pk':i.pk, 'user':i.get_user()}
+            except:
+                return {'heading':i.heading, 'content':i.content, 'image':'', 'comments':comments, 'pk':i.pk, 'user':i.get_user()}
+
+        post = list(map(get_post_dict, post))
         
         return JsonResponse({'wall_data': post }, safe=False)
-    def post(self, *args, **kwargs):
-        post_fields = self.request.POST.dict()
-        print(post_fields)
-        BlogPost.objects.create(heading = post_fields['heading_field'],content = post_fields['content_field'])
-
+    def post(self, *args, **kwargs): 
+        if self.request.session['user_id']:
+            user = User.objects.get(id = self.request.session['user_id'])
+            post_fields = self.request.POST.dict()
+            somepost = SomePost.objects.create()
+            BlogPost.objects.create(comments = somepost, user = user,heading = post_fields['heading_field'],content = post_fields['content_field'])
         return redirect('api:create_post')
 
+@method_decorator(staff_required, name='post')
 class CreateBlogPostComment(View):
     
     def post(self, *args, **kwargs):
-        comment_field = json.loads(self.request.body.decode('utf-8'))
-        print(comment_field)
-        BlogPostComment.objects.create(text = comment_field['text'][0])
-
+        if self.request.session['user_id']:
+            user = User.objects.get(id = self.request.session['user_id'])
+            comment_field = self.request.POST
+            post = BlogPost.objects.get(pk = int(comment_field.get('fk_pk'))).comments
+            somepost = SomePost.objects.create()
+            BlogPostComment.objects.create(replies = somepost,user=user, post = post, text = comment_field.get('content_field'))
+        
         return redirect('api:create_post')
+@method_decorator(staff_required, name='post')
+class CreateTravelPostComment(View):
+    
+    def post(self, *args, **kwargs):
+        if self.request.session['user_id']:
+            user = User.objects.get(id = self.request.session['user_id'])
+            comment_field = self.request.POST
+            post = TravelPost.objects.get(pk = int(comment_field.get('fk_pk'))).comments
+            somepost = SomePost.objects.create()
+            BlogPostComment.objects.create(replies = somepost,user=user, post = post, text = comment_field.get('content_field'))
+        
+        return redirect('api:create_travel_post')
 
+@method_decorator(staff_required, name='post')
+class CreateCommentReply(View):
+    
+    def post(self, *args, **kwargs):
+        try:
+            redirect_url = self.request.POST.get('redirect_url')
+        except:
+            redirect_url = '/app'
+        if self.request.session['user_id']:
+            user = User.objects.get(id = self.request.session['user_id'])
+            reply_field = self.request.POST
+            post = BlogPostComment.objects.get(pk = int(reply_field.get('fk_pk'))).replies
+            CommentReply.objects.create(user =user, post = post, text = reply_field.get('reply_field'))
+        
+        return redirect(redirect_url)
+
+@method_decorator(staff_required, name='post')
 class CreateTravelPost(View):
     def get(self, request, *args, **kwargs ):
-        print('get request')
-        post = list(TravelPost.objects.order_by('-pk').values('heading', 'content', 'pk', 'image'))
+        print('get request kjlkj')
+        
+        post = list(TravelPost.objects.order_by('-pk'))
+        def get_post_dict(i):
+           
+            comments = []
+            
+            for j in i.get_comments():
+                replies = []
+                for k in j.get_replies():
+                    try:
+                        replies.append({'text': k.text, 'image':k.image.url, 'pk':k.pk, 'user':k.get_user()})
+                    except:
+                        replies.append({'text': k.text, 'image':'', 'pk':k.pk,'user':k.get_user()})
+                try: 
+                    comments.append({'text': j.text, 'image':j.image.url, 'pk':j.pk, 'replies': replies, 'user':j.get_user()})
+                except:
+                    comments.append({'text': j.text, 'image':'', 'pk':j.pk, 'replies': replies, 'user':j.get_user()})
+            return {'heading':i.heading, 'content':i.content, 'image':i.get_images(), 'comments':comments, 'pk':i.pk, 'user':i.get_user()}
+
+            
+        post = list(map(get_post_dict, post))
         print(post)
+        print('hey')
         
         return JsonResponse({'travel_data': post }, safe=False)
+
+
     def post(self, *args, **kwargs):
        
-        print(self.request.FILES)
-
+        files = self.request.FILES
+        image = []
+        print(dir(files))
+        for key in files:
+            image.append(files.getlist(key))
         post_fields = self.request.POST.dict()
-        image = self.request.FILES.values()
-        if 'pk' in post_fields:
-            pk = int(post_fields['pk'])
-            print(pk)
-            travelpost = TravelPost.objects.get(pk=pk)
-            print(travelpost)
-            travelpost.heading = post_fields['heading_field']
-            travelpost.content = post_fields['content_field']
-            
-        else:
-            travelpost = TravelPost.objects.create(heading = post_fields['heading_field'],content = post_fields['content_field']) 
         
+        print(image)
+        print(post_fields)
+        if self.request.session['user_id']:
+            user = User.objects.get(id = self.request.session['user_id'])
+            post_fields = self.request.POST.dict()
+            if 'pk' in post_fields:
+                pk = int(post_fields['pk'])
+                travelpost = TravelPost.objects.get(pk=pk)
+                travelpost.content = post_fields['content_field']
+                travelpost.save()
+            else:
+                somepost = SomePost.objects.create()
+                travelpost = TravelPost.objects.create(user=user, comments = somepost, heading = post_fields['heading_field'],content = post_fields['content_field'])
         if image:
-            for i in image:
-                travelpost.image = i
-        travelpost.save()       
+            for i in image[0]:
+                print(i)
+                ImageUpload.objects.create(post = travelpost, image = i)
+        travelpost.save()
+        print(travelpost.get_images())
+               
 
         return redirect('api:create_travel_post')

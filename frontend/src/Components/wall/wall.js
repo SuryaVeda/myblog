@@ -4,15 +4,17 @@ import comment_img from '../../../public/static/images/comment.png';
 import share_img from '../../../public/static/images/share.png';
 import FormCreator from '../forms/formcreator';
 import BlogPostComment from '../comments/blogcomment';
+import create_comment_section from '../comments/comment.js'
 export default class Wall extends React.Component {
     constructor (props) {
         super(props);
         this.state = {wall_data : []}
-        this.loc = {'url': '/api/postForm', 'comment_url': '/api/blogCommentForm'}
+        this.loc = {'url': '/api/postForm', 'comment_url': '/api/blogCommentForm', 'reply_url': '/api/blogReplyForm'}
     }
     componentDidMount () {
         this.props.data.methods.setcomponent('wall', this );
         this.props.data.methods.getData(this.loc.url, 'wall');
+        this.props.data.methods.checkuser('wall');
       
         
     }
@@ -22,55 +24,6 @@ export default class Wall extends React.Component {
         
     }
     render() {
-        let comment_form = (id) => {
-          return({
-            component: 'blogComment',
-            form_url : this.loc.comment_url,
-            data : this.props.data,
-            formMethod: 'POST',
-
-            fields : [
-                {
-                name : 'content_field',
-                type : 'text',
-                placeholder : 'Enter some interesting facts!',
-                className : 'form-field para-font',
-                style : {height:'150px', width:'100%',  margin:'10px 0'},
-                value: '',
-            }],
-            motherStyle: {
-                style: {display:'flex', width:'98%'}
-            },
-            formStyle : {
-                className :'flex-column',
-                style : {width:'90%'}
-            },
-            
-            buttonBaseStyle : {
-                style : {},
-                className : "flex-row space-between"
-            },
-            image_field : {
-                    name: 'post_img',
-                    'className': 'icon',
-                    type: 'file',
-                    style :{display:'none'},
-                    id : 'image-upload-di',
-                    
-                },
-            submit_image : {
-                name : 'send_img',
-                className: 'icon',
-                type:'submit',
-                style:{display:'none'},
-                id : 'send_img_btn',
-            },
-            
-            form_id : id,
-
-            customSubmitFunction: (data,comp) => {console.log('data')}
-        })  
-        };
         
        
         let post_form = {
@@ -127,31 +80,47 @@ export default class Wall extends React.Component {
             customSubmitFunction: (data,comp) => {console.log('data')}
         };
         let data = this.props.data;
+        let mystate = this.state;
+        let myloc = this.loc;
+        let create_post_form = () => {
+            data.methods.user_is_staff();
+            if (data.methods.user_is_staff()) {
+                return(
+                    <div className = 'wall-post notosans'>
+                    <FormCreator props = {post_form} />
+                    </div>
+                )
+            } else {
+
+            }
+        };
+
         
         
         
         
         return (
             <div className = 'wall notosans'>
-                <div className = 'wall-post notosans'>
-                <FormCreator props = {post_form} />
-                </div>
+                {create_post_form()}
                 {this.state.wall_data.map(function (i , index) {
                     let post_id = `blog_post_${index}`;
                     let comment_id = `blog-comment-form-${i.pk}` ;
+                    let comment_details = `blog-comment-details-${i.pk}` ;
+
                     
                     return (
                     <div id = {post_id} className = 'wall-post notosans'>
                 
                     <h2 className = "margin-bottom-zero">{i.heading}</h2>
-                    <p className = 'small-font'>A.Suryaveda | 10 min ago</p>
+                    <p className = 'small-font'>{i.user.username} | 10 min ago</p>
                     <p>{i.content}</p>
     
                     <div className = 'flex-column comment-section'>
                     <div className='flex-column comment-bar'>
-                        <div id = 'ex'></div>
-                        <img onClick = {(e) => {e.target.parentElement.nextElementSibling.style.display = 'flex'}}  src = {comment_img} className = 'icon' />
+                        <img onClick = {(e) => {document.getElementById(comment_details).style.display = 'flex'}}  src = {comment_img} className = 'icon' />
                     </div>
+                    {create_comment_section(comment_details, i, comment_id,mystate.user, {comp:'wall', loc:myloc, data:data})}
+                    
                     
                     </div>
                 </div>
