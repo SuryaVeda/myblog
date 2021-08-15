@@ -64,7 +64,7 @@ export default class Fact extends React.Component {
    
         
         return(
-            <div className = 'flex-column facts notosans'>
+            <div className = 'flex-column facts notosans linebreaks'>
                    <h2 onClick = {(event) => {
                        if (this.props.data.methods.user_is_staff()) {
                         this.props.data.methods.showform('fact_para', fact_form.form_id)                          
