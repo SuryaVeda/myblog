@@ -57,6 +57,7 @@ export default class Fact extends React.Component {
                 className : "flex-column acenter"
             },
             form_id : 'fact_form',
+            buttonCustomFunction: () => {this.props.data.methods.showform('fact_form', 'fact_para')},
 
             customSubmitFunction: (data,comp) => {(comp.details = data)}
         };
