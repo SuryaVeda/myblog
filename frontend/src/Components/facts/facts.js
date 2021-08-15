@@ -1,13 +1,14 @@
 import React  from 'react';
 import '../../index.css';
 import FormCreator from '../forms/formcreator';
+import Carousel from '../carousel/carousel';
 
 export default class Fact extends React.Component {
 
     constructor(props) {
         super(props);
         this.props = props;
-        this.state = {fact_data : {'para':''}};
+        this.state = {fact_data : []};
         this.loc = {'url': '/api/factForm'};
     }
 
@@ -73,7 +74,10 @@ export default class Fact extends React.Component {
                        }
                    }}>Something new!!</h2>
                    <FormCreator props = {fact_form} />
-                   <p id= 'fact_para' onClick = {(event) => {this.props.data.methods.showform('fact_para', fact_form.form_id)}}> {this.state.fact_data.para} </p>
+                   <div id= 'fact_para' >
+                   {Carousel.get_text_slider(this.state.fact_data, 'fact_data_id', 'fact_data_class')}
+
+                   </div>
            </div>
         )
     }

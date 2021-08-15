@@ -70,6 +70,42 @@ static  previousquestion(classname) {
                     }
                     
                 }
+                static get_text_slider (i, carousel_box_id, carousel_block_class) {
+                    
+                    if (i.length > 0) {
+                        return(
+                            <div className='flex-column'>
+                            <div className='flex-column acenter jcenter' id={carousel_box_id} >
+                                
+                                {i.map(function (j, jindex) {
+                                    
+                                    if (jindex != 0) {
+                                        return(
+                                            <div className={carousel_block_class} style = {{'display':'none'}} >
+                                                <p>{j.para}</p>
+                                            </div>
+                                                )                                        
+                                    } else {
+                                        return(
+                                            <div className={carousel_block_class} style = {{'display':'flex'}} >
+                                                <p>{j.para}</p>
+                                            </div>
+                                                )
+                                    }
+                                })}
+                                <p style={{ alignSelf: 'center', backgroundColor: '#000066', color: 'white' }}>
+
+                                    <a className='pointer' onClick={(event) => { this.previousquestion(carousel_block_class) }}>PREV</a>
+                                    |
+                                    <a className='pointer' onClick={(event) => { this.nextquestion(carousel_block_class) }}>NEXT</a>
+                                </p>
+                            </div>
+                      </div>
+                        )
+                    }
+                    
+                }
+
 
 
 /*   

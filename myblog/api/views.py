@@ -36,14 +36,15 @@ class CheckUser(View):
 class CreateFact(View):
     def get(self, request, *args, **kwargs ):
         print('get request')
-        para = list(Fact.objects.order_by('-pk'))[0].para
-        return JsonResponse({'fact_data': {'para': para}})
+        para = list(Fact.objects.order_by('-pk').values('para', 'pk'))
+        print(para)
+        return JsonResponse({'fact_data': para}, safe=False)
     def post(self, *args, **kwargs):
         fact_field = self.request.POST.dict()
         print(fact_field)
         x = Fact.objects.create(para = fact_field['fact_field'])
         print(type(x.para))
-        return JsonResponse({'fact_data': {'para': x.para}}, safe=False)
+        return redirect('api:fact_form')
 
 
 @method_decorator(staff_required, name='post')
