@@ -36,6 +36,9 @@
   color: #000066;
   font-weight: bold;
 }
+.underline {
+  text-decoration: underline;
+}
 .bold-red{
   color: red;
   font-weight: 400;
@@ -174,6 +177,9 @@
 .space-down {
   margin-bottom: 20px;
 }
+.space-top {
+  margin-top: 20px;
+}
 .margin-bottom-zero {
   margin-bottom: 0;
 }
@@ -298,6 +304,9 @@ a {
 
 
 }
+.trip-content-list {
+  position: fixed;
+}
 .trip-main {
   width: 70%;
   height: auto;
@@ -331,6 +340,10 @@ a {
   height: auto;
   width: auto;
   align-self: center;
+}
+.content-list {
+  max-height: 300px;
+  overflow: scroll;
 }
 
 

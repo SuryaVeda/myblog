@@ -8,12 +8,14 @@ import comment_img from '../../../public/static/images/comment.png'
 class Trips extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {};
-        this.loc = {'url': '/'};
+        this.state = {'travel_data':[]};
+        this.loc = {'url': '/', 'turl': '/api/travelPostForm'};
    
     }
     componentDidMount () {
         this.props.data.methods.setcomponent('trips', this );
+        this.props.data.methods.getData(this.loc.turl, 'trips');
+
         
     }
     componentDidUpdate () {
@@ -66,17 +68,30 @@ class Trips extends React.Component {
             buttonCustomFunction : (event) => {event.target.style.display = 'none'; event.target.nextSibling.style.display = 'flex'},
             customSubmitFunction: (data,comp) => {(comp.details = data)}
         };
+        let tstate = this.state.travel_data;
         
        
         return(
             
             <div className="flex-row ubuntu nowrap">
                 <div className = 'flex-column trip-index'>
+                    <div className = 'flex-column trip-content-list'>
                     <h2>Contents</h2>
                     <div className = 'search-trips flex-column' >
-                        <FormCreator props = {search_trips} />
+                        <FormCreator props = {search_trips} />      
+                    </div>
+                    <div className = 'flex-column content-list unwrap'>
+                        <p onClick = {(event) => {event.target.nextSibling.style.display = 'flex'}} className='pointer underline acenter space-top'>list of contents</p>
+                        <ol className = 'display-none flex-column nowrap'>
+                        {tstate.map(function (i, index) {
+                            return(
+                                <li onClick={()=> {window.location.href = `#travel_main_post_${i.pk}`}} className = 'pointer underline bold-red space-down'>{i.heading}</li>
+                                
+                            )
+                        })}
+                        </ol>
                         
-                        
+                    </div>
                     </div>
                 </div>
                 

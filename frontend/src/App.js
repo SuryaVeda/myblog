@@ -95,8 +95,8 @@ getData(url, cstate) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
          // Typical action to be performed when the document is ready:
+         console.log(this.responseText);
               let response = JSON.parse(this.responseText);
-              console.log('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')
               
         xx.components[cstate].setState(response);
             }

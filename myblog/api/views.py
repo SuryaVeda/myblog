@@ -1,4 +1,4 @@
-import json
+import json, bleach
 from django.db import connections
 from django.db.models.expressions import F
 from django.shortcuts import redirect, render
@@ -148,7 +148,6 @@ class CreateTravelPost(View):
 
             
         post = list(map(get_post_dict, post))
-        print(post)
         print('hey')
         
         return JsonResponse({'travel_data': post }, safe=False)
@@ -158,30 +157,28 @@ class CreateTravelPost(View):
        
         files = self.request.FILES
         image = []
-        print(dir(files))
         for key in files:
             image.append(files.getlist(key))
         post_fields = self.request.POST.dict()
         
-        print(image)
-        print(post_fields)
+        
         if self.request.session['user_id']:
             user = User.objects.get(id = self.request.session['user_id'])
             post_fields = self.request.POST.dict()
             if 'pk' in post_fields:
                 pk = int(post_fields['pk'])
                 travelpost = TravelPost.objects.get(pk=pk)
-                travelpost.content = post_fields['content_field']
+                travelpost.heading = bleach.clean(post_fields['heading_field'],strip=True)
+                travelpost.content = bleach.clean(post_fields['content_field'],tags=['h2', 'b'],attributes=['style', 'class'],styles=['color', 'font-weight', 'font-size'], strip = True)
                 travelpost.save()
             else:
                 somepost = SomePost.objects.create()
-                travelpost = TravelPost.objects.create(user=user, comments = somepost, heading = post_fields['heading_field'],content = post_fields['content_field'])
+                travelpost = TravelPost.objects.create(user=user, comments = somepost, heading = bleach.clean(post_fields['heading_field'],strip=True),content = bleach.clean(post_fields['content_field'],tags=['h2', 'b'],attributes=['style', 'class'],styles=['color', 'font-weight', 'font-size'], strip = True))
         if image:
             for i in image[0]:
                 print(i)
                 ImageUpload.objects.create(post = travelpost, image = i)
         travelpost.save()
-        print(travelpost.get_images())
                
 
         return redirect('api:create_travel_post')

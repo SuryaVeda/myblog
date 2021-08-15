@@ -5,6 +5,7 @@ import FormCreator from '../forms/formcreator';
 import comment_img from '../../../public/static/images/comment.png';
 import create_comment_section from '../comments/comment';
 import Carousel from '../carousel/carousel';
+import parse from 'html-react-parser';
 export default class TripContent extends React.Component {
     constructor (props) {
         super(props);
@@ -145,12 +146,12 @@ export default class TripContent extends React.Component {
                     {get_edit_travel_form()}
 
                     <div id={post_id} className="notosans flex-column">
-                      <h2  onClick={(event) => {if (ndata.methods.user_is_staff())  {ndata.methods.showform(post_id, new_form_id)}}} className="margin-bottom-zero">{i.heading}</h2>
+                      <h2 style={{fontSize:'30px'}}  onClick={(event) => {if (ndata.methods.user_is_staff())  {ndata.methods.showform(post_id, new_form_id)}}} className="margin-bottom-zero">{i.heading}</h2>
                       <p className="small-font">A.Suryaveda | 10 min ago</p>
 
                       {Carousel.get_travel_image(i, carousel_box_id, carousel_block_class)}
 
-                      <p className="linebreaks">{i.content}</p>
+                      <p className="linebreaks">{parse(i.content)}</p>
                       <div className = 'flex-column comment-section'>
                     <div className='flex-column comment-bar'>
                         <img onClick = {(e) => {document.getElementById(comment_details).style.display = 'flex'}}  src = {comment_img} className = 'icon' />
