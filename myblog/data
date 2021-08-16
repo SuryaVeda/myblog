@@ -806,7 +806,7 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.accounts_user (id, password, last_login, email, username, is_active, staff, admin) FROM stdin;
-1	pbkdf2_sha256$260000$ccinTjRZ4eDU447SG74Lj6$gQfIsg1vMcMmlpfUzfqlnxtQZ0BCOo1Jd+I/lIYnHnY=	2021-08-15 10:30:32.628521+05:30	sk@gmail.com		t	t	f
+1	pbkdf2_sha256$260000$ccinTjRZ4eDU447SG74Lj6$gQfIsg1vMcMmlpfUzfqlnxtQZ0BCOo1Jd+I/lIYnHnY=	2021-08-15 18:26:04.906121+05:30	sk@gmail.com		t	t	f
 \.
 
 
@@ -840,6 +840,9 @@ COPY public.api_commentreply (id, text, post_id, user_id) FROM stdin;
 
 COPY public.api_fact (id, para) FROM stdin;
 1	four babies are born per second in the world!!\r\n\r\n1.8 people die every second!\r\n\r\nPeople 60 years and older make up 12.3% of the global population.\r\n\r\nMore than 52% of the world's population is under 30 years old.\r\n\r\n
+2	\r\nWorld’s only floating national park– Keibul Lamjao National Park in manipur.\r\n\r\nKeibul Lamjao National Park is situated on the floating Loktak Lake of Manipur. \r\n\r\nIt has a vast wetland populated with dense dead and decaying floating vegetation called phumdi. \r\n\r\nIt is home to the endangered Sangai or the brow-antlered deer and rare flora which are also the state animal of Manipur. 
+3	Manipur has the oldest polo ground in the world at Imphal’s Mapal Kangjeibung. \r\n\r\nIt is said that Manipur's deity-king Kangba invented the game in the 14th century BC, and in 33 AD, King Nongda Pakhangba hosted the first polo match. \r\n\r\nIt hosts the Manipur International Polo Festival every year which is attended by a lot of polo fans and is around Nov - January.
+4	moreh is a place near imphal, manipur where shopping is very cheap becoz of its proximity to mynmar border, cigarettes are just 20 rs per pack!!
 \.
 
 
@@ -1080,7 +1083,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 ke0dby0wx7vnl15ah7cfsmpqgahmdmyx	.eJxVjksOwjAMRO-SNYrycdOYJXvOEDmxQwuolfpZIe5OK1UItvNmnualEq1Ll9ZZptSzOiurTr9ZpvKQYQd8p-E26jIOy9RnvVf0QWd9HVmel6P7J-ho7rY1OGokRhCoOXiM4C0WAt9YwuADcq0SwEUHLRc2uSVE48iIFxc5m036_WjfH33IO0Q:1mF77n:g7QF_04tHwLLVOlhMdbf9coL2aocDG-azOHiKLFMeJI	2021-08-29 09:17:51.028949+05:30
-oi0rzdh9z19ecb3nnbn9ec41dohhn825	.eJxVjksOwjAMRO-SNYrycdOYJXvOEDmxQwuolfpZIe5OK1UItvNmnualEq1Ll9ZZptSzOiurTr9ZpvKQYQd8p-E26jIOy9RnvVf0QWd9HVmel6P7J-ho7rY1OGokRhCoOXiM4C0WAt9YwuADcq0SwEUHLRc2uSVE48iIFxc5m036_WjfH33IO0Q:1mF8G8:C4zGUrui3XeMUYl93iVFeQGsRQt-7R34Od3BN_xxuK4	2021-08-29 10:30:32.629804+05:30
+oi0rzdh9z19ecb3nnbn9ec41dohhn825	.eJxVjksOwjAMRO-SNYrycdOYJXvOEDmxQwuolfpZIe5OK1UItvNmnualEq1Ll9ZZptSzOiurTr9ZpvKQYQd8p-E26jIOy9RnvVf0QWd9HVmel6P7J-ho7rY1OGokRhCoOXiM4C0WAt9YwuADcq0SwEUHLRc2uSVE48iIFxc5m036_WjfH33IO0Q:1mFFgK:GFKj8rJryILyu_cBVjk6_mLiMz00WzPyJDAN5rGusVA	2021-08-29 18:26:04.909857+05:30
 \.
 
 
@@ -1116,7 +1119,7 @@ SELECT pg_catalog.setval('public.api_commentreply_id_seq', 1, false);
 -- Name: api_fact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sk
 --
 
-SELECT pg_catalog.setval('public.api_fact_id_seq', 1, true);
+SELECT pg_catalog.setval('public.api_fact_id_seq', 4, true);
 
 
 --
